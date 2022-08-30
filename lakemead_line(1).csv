@@ -1,4 +1,4 @@
-Year,Date,Time,Low Elev (ft),Date,Time,High Elev (ft)
+Year,lDate,lTime,lElevft,hDate,hTime,hElevft
 1935,3-Feb,2400,673.5,31-Jul,2400,928.45
 1936,14-Apr,2400,905.2,10-Sep,2400,1025.87
 1937,5-Feb,2400,1021.9,28-Jul,2400,1102.88
