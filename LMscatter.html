@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lowest lake Mead scatter</title>
+</head>
+<style>
+    #myDiv {
+        background-color: blue;
+        width: 800px;
+        height: 800px;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.14.0/plotly.min.js" integrity="sha512-XDnqTWsAcVl16AYJoBHumISzIYThowGjR67jeL53NSp6tajsq2qf5UeAWvk1n6Hp3M2iMsV/ewhPScBiLCDs9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="myResult.js"></script>
+<body>
+    <div id="myDiv">
+
+    </div>
+    <script>
+        var x = myResult.map(e => Number( e.Year))
+        var y = myResult.map(e => e.lElevft)
+
+        var trace1 = {
+  x: x,
+  y: y,
+  mode: 'line',
+  type: 'scatter',
+  marker: {
+    color: y, colorscale: 'Portland'
+  }
+};
+var layout={ 
+    title: {
+        text: 'Lake Mead lowest Elevation per year'
+    },
+    xaxis: {
+        title: {
+            text: 'Year'
+        },
+        range:[1930, 2025]
+    },
+    yaxis:{
+        title: {
+            text: 'Elevation (ft)'
+        },
+        range: [0, 1300]
+    }
+}
+
+var data = [trace1];
+
+Plotly.newPlot('myDiv', data,layout);
+
+    </script>
+</body>
+</html>
