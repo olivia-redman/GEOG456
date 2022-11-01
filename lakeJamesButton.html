@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>lake james buttons  </title>
+</head>
+<style>
+    img{
+        position: absolute;
+        height: 400px ;
+    }
+    h1{
+        visibility: hidden;
+        font-family: 'Courier New', Courier, monospace;
+        margin-top: 1px;
+    }
+    button{
+        position: absolute;
+        top: 600px;
+    }
+</style>
+<body>
+    <h1 id="one">Park in 2008</h1>
+    <h1 id="two"> Park in 2010</h1>
+    <h1 id="three"> Park in 2020</h1>
+    <img id="third" src="./png/2020.png" alt="" width="400px">
+    <img id="second" src="./png/2010.png" alt="" width="400px">
+    <img id="first" src="./png/2008.png" alt="" width="400px">
+    <button style="left: 285px" onclick="myFunction('third');change_text('three')"> 2020 </button>
+    <button style="left: 190px" onclick="myFunction('second');change_text('two')">2010</button>
+    <button style="left: 95px" onclick="myFunction('first');change_text('one')">2008</button>
+</body>
+<script>
+    function myFunction(id){
+        var imgs = document.getElementsByTagName('img')
+        for( var i = 0; i < imgs.length; i ++){
+            imgs[i].style.visibility ='hidden'
+        }
+        var daImg = document.getElementById(id)
+        daImg.style.visibility = 'visible'
+        console.log(daImg)
+    }
+    function change_text(id) {
+        var mes = document.getElementsByTagName('h1')
+        for( var i = 0; i < mes.length; i ++){
+            mes[i].style.visibility ='hidden'
+        }
+        var daMes = document.getElementById(id)
+        daMes.style.visibility = 'visible'
+        console.log(daMes)
+    }
+</script>
+</html>
