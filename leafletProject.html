@@ -4,49 +4,159 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>project</title>
+    <title>Final project</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin=""/>
     <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
     crossorigin=""></script>
-    <script src="conflictBF.geojson"></script>
+    <script src="./1975"></script>
+    <script src="./2000"></script>
+    <script src="./2013"></script>
+    <script src="conflictBur.js"></script>
 </head>
 <style>
     #map { 
-        height: 500px;
-        width: 100%;
-        background-color: cadetblue; 
+        height: 800px;
+        width: 90%;
+        
     }
+    .legend {
+    line-height: 18px;
+    width: 250px;
+    height: 500px;
+    color: #555;
+    
+}
+.legend i {
+    width: 15px;
+    height: 15px;
+    float: left;
+    margin-right: 8px;
+    opacity: 1;
+}
+
+
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
 </style>
 <body>
     <div id="map"></div>
+    <div class="legend"></div>
     <script>
-        var map = L.map('map').setView([12.2383, -1.5616], 5);
+        var map = L.map('map').setView([12.2383, -0.8616], 7); 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        });
+       var LULCC_1975= L.tileLayer('./1975/{z}/{x}/{y}.png', {
+        });
+        var LULCC_2000= L.tileLayer('./2000/{z}/{x}/{y}.png', {
+        });
+        var LULCC_2013= L.tileLayer('./2013/{z}/{x}/{y}.png', {
+        });
+        var geojson = L.geoJSON(conflictBur,{
+            onEachFeature: onEachFeature
         }).addTo(map);
 
-//         var hIcon = L.icon({
-//         iconUrl: 'work.png',
-//         iconSize: [50,50],
-//         iconAnchor: [0,0]
-//     })
+        var baseMaps = {
+            "OpenStreetMap" : osm,
+             
+        };
 
-//         function myStyle(feature) {
-//         // console.log(feature.properties.Cessions_Y)
-//         return {
-//     "color": getColor(feature.properties.Cessions_Y),
-//     "weight": .25,
-//     "opacity": 0.65
-//         }
-// };
-//         var geojson = L.geojson(conflictBF, {
-//         style: myStyle,
-//         pointToLayer: function (feature, latlng){
-//             return L.marker(latlng, {icon:hIcon})
-//         }
-//     }).addTo(map);
+        var overlayMaps = {
+            "2000": LULCC_2000,
+            "2013": LULCC_2013,
+            "1975": LULCC_1975, 
+            "conflicts": geojson,
+        };
+
+        var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+
+        function onEachFeature(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties['event_date']) {
+        var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['event_date']) + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['notes']) + '</td>\
+                    </tr>\
+                </table>';
+        layer.bindPopup(popupContent);
+    }
+}
+
+function getColor(d) {
+    return d === "Forest" ? "#8400A8" :
+           d === 'Savanna'  ? '#8BAD8B' :
+           d === 'Wetland-Floodplains' ? '#000080' :
+           d === 'Steppe'  ? '#FFCC99' :
+           d === 'Plantation'  ? '#808000' :
+           d === 'Mangrove'  ? '#33CCCC' :
+           d === 'Agriculture'  ? '#FFFF96' :
+           d === 'Water bodies'  ? '#3366FF' :
+           d === 'Sandy area' ? '#FF99CC' :
+           d === 'Rocky land' ? '#969696' :
+           d === 'Bare soil'  ? '#A87000' :
+           d === 'Settlements'  ? '#FF0000' :
+           d === 'Irrigated agriculture'  ? '#CCFF66' :
+           d === 'Gallery forest & riparian forest'  ? '#A95CE6' :
+           d === 'Degraded forest'  ? '#D296E6' :
+           d === 'Bowe'  ? '#A83800' :
+           d === 'Thicket'  ? '#F5A27A' :
+           d === 'Agriculture in shallows & recession'  ? '#EBC961' :
+           d === 'Woodland'  ? '#28734B' :
+           d === 'Cropland and fallow with oil palms'  ? '#EBDF73' :
+           d === 'Swamp forest'  ? '#BEFFA6' :
+           d === 'Sahelian short grass savanna'  ? '#A6C28C' :
+           d === 'Herbaceous savanna'  ? '#0A9696' :
+           d === 'Shrubland'  ? '#749373' :
+           d === 'Open mine'  ? '#505050' :
+           d === 'Cloud'  ? '#FFFFFF' :
+                      '#FFEDA0';
+}
+
+
+
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+    labels = [],
+        grades = ['Forest','Savanna','Wetland-Floodplains','Steppe','Plantation','Mangrove','Agriculture','Water bodies','Sandy area','Rocky land','Bare soil','Settlements','Irrigated agriculture',
+        'Gallery forest & riparian forest','Degraded forest','Bowe','Thicket','Agriculture in shallows & recession','Woodland','Cropland and fallow with oil palms','Swamp forest','Sahelian short grass savanna',
+        'Herbaceous savanna','Shrubland','Open mine','Cloud'];
+        
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+        labels.push(
+            '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+            (grades[i] ? grades[i] : '+'))
+    }
+    div.innerHTML = labels.join('<br>');
+    return div;
+};
+
+legend.addTo(map);
+
+
+
     </script>
 </body>
 </html>
